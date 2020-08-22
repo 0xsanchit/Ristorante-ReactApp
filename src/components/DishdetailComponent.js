@@ -1,58 +1,25 @@
-import React , { Component } from 'react';
-import {Card,CardImg,CardImgOverlay,CardBody,CardText , CardTitle} from 'reactstrap'
-import { format } from 'date-fns';
+import React  from 'react';
+import {Card,CardImg,CardImgOverlay,CardBody,CardText , CardTitle,BreadcrumbItem,Breadcrumb} from 'reactstrap'
+import {Link} from 'react-router-dom'
 
-class Dishdetail extends Component {
-    constructor(props)
+
+
+    function RenderDish({dish})
     {
-        super(props);
-
-    }
-
-    render()
-    {
-        if(this.props.dish!=null)
+        if(dish!=null)
         {
-            const comments = this.props.dish.comments.map((comment1) =>{
-                //var formattedDate = format(comment1.date , "MMMM Do, YYYY H:mma");
-                return(
-                    <div key={comment1.id} className="col-12">
-                        <div className="container">
-                        <div className="row">
-                                {comment1.comment}
-                            </div>
-                            <div className="row">
-                                <p>--{comment1.author} ,
-                               {new Intl.DateTimeFormat('en-US', {year: 'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment1.date)))} 
-                                </p>
-                                
-                            </div>
-                        </div>
-                    </div>
-                );
-            })
             return(
-                
-                <div className="container">
-                    <div className="row">
-                    <div key={this.props.dish.id} className="col-12 col-md-5 m-1">
+                    <div key={dish.id}>
                 <Card>
-                    <CardImg width="100%" src={this.props.dish.image} alt={this.props.dish.name} />
+                    <CardImg width="100%" src={dish.image} alt={dish.name} />
                        
                     <CardBody>
-                    <CardTitle >{this.props.dish.name}</CardTitle>
-                        {this.props.dish.description}
+                    <CardTitle >{dish.name}</CardTitle>
+                        {dish.description}
                     </CardBody>
                 </Card>
             </div>
-            <div className="col-12 col-md-5 m-1">
-                <h1>Comments</h1>
-                {comments}
-            </div>
-                    </div>
-                    
-                </div>
-                
+                                
             );
         }
         else{
@@ -62,6 +29,73 @@ class Dishdetail extends Component {
         }
         
     }
-}
+
+    function RenderComments({commentsprop})
+    {
+        const comments2 = commentsprop.map((comment1) =>{
+                //var formattedDate = format(comment1.date , "MMMM Do, YYYY H:mma");
+                return(
+                    <div key={comment1.id}>
+                        <div className="row">
+                                {comment1.comment}
+                            </div>
+                            <div className="row">
+                                <p>--{comment1.author} ,
+                               {new Intl.DateTimeFormat('en-US', {year: 'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment1.date)))} 
+                                </p>
+                                
+                            </div>
+                    </div>
+                );
+            })
+
+            return(
+                <div>
+                {comments2}
+                </div>
+              
+            );
+           
+        
+    }
+
+    const Dishdetail = (props) => {
+        if(props.dish!=null)
+        {
+            return(
+                <div className="container">
+                    <div className="row">
+                        <Breadcrumb>
+                        <BreadcrumbItem><Link to="/home">Home</Link></BreadcrumbItem>
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                        </Breadcrumb>
+                    </div>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr/>
+                    </div>
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                    <RenderDish dish={props.dish} />
+                    </div>
+                    <div className="col-12 col-md-5 m-1">
+                    <RenderComments commentsprop={props.comments} />
+                    </div>
+                
+                </div>
+                </div>
+            );
+         
+        }
+        else{
+            return(
+                <div></div>
+            );
+        }
+    }
+
+
+
 
 export default Dishdetail ;
