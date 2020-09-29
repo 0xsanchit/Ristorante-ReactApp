@@ -2,7 +2,7 @@ import React  from 'react';
 import {Card,CardImg,CardImgOverlay,CardBody,CardText , CardTitle,BreadcrumbItem,Breadcrumb} from 'reactstrap'
 import {Link} from 'react-router-dom'
 import CommentForm from './CommentFormComponent';
-
+import {Loading} from './LoadingComponent';
 
 
     function RenderDish({dish})
@@ -61,7 +61,25 @@ import CommentForm from './CommentFormComponent';
     }
 
     const Dishdetail = (props) => {
-        if(props.dish!=null)
+        if(props.isLoading) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if(props.errMess) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            );
+        }
+        else if(props.dish!=null)
         {
             return(
                 <div className="container">
@@ -82,7 +100,7 @@ import CommentForm from './CommentFormComponent';
                     </div>
                     <div className="col-12 col-md-5 m-1">
                     <RenderComments commentsprop={props.comments} />
-                    <CommentForm />
+                    <CommentForm addComment={props.addComment} dishId={props.dish.id}/>
                     </div>
 
                 
