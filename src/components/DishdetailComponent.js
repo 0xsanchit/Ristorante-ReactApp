@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import CommentForm from './CommentFormComponent';
 import {Loading} from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
-
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
     function RenderDish({dish})
     {
@@ -12,6 +12,9 @@ import { baseUrl } from '../shared/baseUrl';
         {
             return(
                     <div key={dish.id}>
+                        <FadeTransform in transformProps={{
+                            exitTransform: 'scale(0.5) translateY(-50%)'
+                        }}>
                 <Card>
                     <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
                        
@@ -20,6 +23,7 @@ import { baseUrl } from '../shared/baseUrl';
                         {dish.description}
                     </CardBody>
                 </Card>
+                </FadeTransform>
             </div>
                                 
             );
@@ -37,23 +41,27 @@ import { baseUrl } from '../shared/baseUrl';
         const comments2 = commentsprop.map((comment1) =>{
                 //var formattedDate = format(comment1.date , "MMMM Do, YYYY H:mma");
                 return(
+                    <Fade in>
                     <div key={comment1.id}>
-                        <div className="row">
-                                {comment1.comment}
-                            </div>
                             <div className="row">
-                                <p>--{comment1.author} ,
-                               {new Intl.DateTimeFormat('en-US', {year: 'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment1.date)))} 
-                                </p>
-                                
-                            </div>
+                                    {comment1.comment}
+                                </div>
+                                <div className="row">
+                                    <p>--{comment1.author} ,
+                                {new Intl.DateTimeFormat('en-US', {year: 'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment1.date)))} 
+                                    </p>
+                                    
+                                </div>
                     </div>
+                    </Fade>
                 );
             })
 
             return(
                 <div>
+                <Stagger in>
                 {comments2}
+                </Stagger>
                 </div>
               
             );
@@ -101,7 +109,7 @@ import { baseUrl } from '../shared/baseUrl';
                     </div>
                     <div className="col-12 col-md-5 m-1">
                     <RenderComments commentsprop={props.comments} />
-                    <CommentForm addComment={props.addComment} dishId={props.dish.id}/>
+                    <CommentForm postComment={props.postComment} dishId={props.dish.id}/>
                     </div>
 
                 
